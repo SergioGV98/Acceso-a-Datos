@@ -21,7 +21,6 @@ public class Ejercicio1punto13 {
         String nomFich = url.substring(url.lastIndexOf("/") + 1);
         
         try(InputStream is = u.openConnection().getInputStream(); FileOutputStream w = new FileOutputStream(nomFich)){
-            u = new URL(url);
             int byteLeido;
             while((byteLeido = is.read()) != -1){
                 w.write(byteLeido);
