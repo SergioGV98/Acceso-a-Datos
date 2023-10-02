@@ -13,7 +13,7 @@ public class Ejercicio1punto2 {
     
     public static void main(String[] args) {
         
-        File directory = new File("C:\\Users\\Sergio\\Desktop\\Estudios\\Acceso-a-Datos\\Ejercicios de repaso\\Ejercicio1punto2\\Ej");
+        File directory = new File("C:\\Users\\Sergio\\Desktop\\Estudios\\Acceso-a-Datos\\Tema 1\\Ejercicios de repaso\\Ejercicio1punto2\\Ej");
         System.out.println(directory.getName());
         
         // Creacion de los directorios y archivos y monstrado nombres por consola.

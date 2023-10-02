@@ -44,8 +44,7 @@ public class Ejercicio1punto4 {
             }
             System.exit(0);
         } else {  // Si existe uso el InputStream para guardarlo y creo una copia 
-            try(FileInputStream original = new FileInputStream(archivo)) { // Lo quiere de esta forma
-                FileOutputStream copia = new FileOutputStream(archivo.getAbsolutePath() + ".bak"); // cojo la direccion del archivo y le agrego su extension
+            try(FileInputStream original = new FileInputStream(archivo); FileOutputStream copia = new FileOutputStream(archivo.getAbsolutePath() + ".bak")) { // Lo quiere de esta forma
                 
                 int byteLeido;
                 
@@ -53,7 +52,7 @@ public class Ejercicio1punto4 {
                     copia.write(byteLeido);
                 }
                 
-                System.out.println("Copia de seguridad creada como: " + archivo.getAbsolutePath() + ".bak");
+                System.out.printf("Copia de seguridad creada como: %s.bak\n", archivo.getAbsolutePath());
                 
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();

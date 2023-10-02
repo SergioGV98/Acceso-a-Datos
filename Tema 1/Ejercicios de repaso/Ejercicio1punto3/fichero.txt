@@ -1,0 +1,1 @@
+Hola, soy una secuencia de bytes o ñ, ç.
