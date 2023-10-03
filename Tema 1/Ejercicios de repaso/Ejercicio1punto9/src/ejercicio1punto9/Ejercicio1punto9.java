@@ -31,7 +31,7 @@ public class Ejercicio1punto9 {
 
             while ((unCar = fr.read(arr)) != -1) {
                 String texto = new String(arr, 0, unCar);
-                System.out.print(texto);
+                System.out.println(texto);
             }
         } catch (IOException ex) {
             System.out.printf("ERROR: leyendo de fichero: %s\n", ex.getMessage());
