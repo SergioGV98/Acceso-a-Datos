@@ -1,5 +1,15 @@
 package ejercicio1punto14;
 
+import clases.Empleado;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+
 /**
  * Todo lo que se pide en esta actividad debe estar en un mismo proyecto. Crea
  * una clase Empleado, con atributos numEmp de tipo int, dni de tipo String,
@@ -19,6 +29,40 @@ public class Ejercicio1punto14 {
 
     public static void main(String[] args) {
 
+        /*
+        Empleado[] empl = {
+            new Empleado(1, "26352", "Paco", 1240.21, false),
+            new Empleado(2, "154663", "Antonio", 810.11, true),
+            new Empleado(3, "632421", "Maria", 2143.61, false)
+        };
+
+        try (var os = new FileOutputStream("empleados.txt"); var dos = new DataOutputStream(os)) {
+            for (Empleado empleado : empl) {
+                dos.writeInt(empleado.getNumEmp());
+                dos.writeUTF(empleado.getDni());
+                dos.writeUTF(empleado.getNombre());
+                dos.writeDouble(empleado.getSalBrutoAnual());
+                dos.writeBoolean(empleado.istParcial());
+            }
+        } catch (IOException ex) {
+            System.out.printf("ERROR: %s", ex.getMessage());
+        }
+         */
+        List<Empleado> empleados = null;
+        try (FileInputStream is = new FileInputStream("empleados.txt"); DataInputStream dos = new DataInputStream(is)) {
+            for (int i = 0; true; i++) {
+                int numEmp = dos.readInt();
+                String dni = dos.readUTF();
+                String nombre = dos.readUTF();
+                double salBrutoAnual = dos.readDouble();
+                boolean tParcial = dos.readBoolean();
+                empleados.add(new Empleado(numEmp, dni, nombre, salBrutoAnual, tParcial));
+            }
+            
+        } catch (IOException ex) {
+            System.out.printf("ERROR: %s", ex.getMessage());
+        }
+        System.out.println(empleados.get(0));
     }
 
 }
