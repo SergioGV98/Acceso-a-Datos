@@ -3,11 +3,13 @@ package ejercicio1punto14;
 import clases.Empleado;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,21 +50,24 @@ public class Ejercicio1punto14 {
             System.out.printf("ERROR: %s", ex.getMessage());
         }
          */
-        List<Empleado> empleados = null;
-        try (FileInputStream is = new FileInputStream("empleados.txt"); DataInputStream dos = new DataInputStream(is)) {
-            for (int i = 0; true; i++) {
-                int numEmp = dos.readInt();
-                String dni = dos.readUTF();
-                String nombre = dos.readUTF();
-                double salBrutoAnual = dos.readDouble();
-                boolean tParcial = dos.readBoolean();
+        List<Empleado> empleados = new ArrayList<>();
+        try (FileInputStream is = new FileInputStream("empleados.txt"); DataInputStream dis = new DataInputStream(is)) {
+            while (true) {
+                int numEmp = dis.readInt();
+                String dni = dis.readUTF();
+                String nombre = dis.readUTF();
+                double salBrutoAnual = dis.readDouble();
+                boolean tParcial = dis.readBoolean();
                 empleados.add(new Empleado(numEmp, dni, nombre, salBrutoAnual, tParcial));
             }
-            
+        } catch (EOFException ex) {
+            // No es un error, simplemente indica que hemos terminado de leer el archivo
         } catch (IOException ex) {
             System.out.printf("ERROR: %s", ex.getMessage());
         }
-        System.out.println(empleados.get(0));
-    }
 
+        for (Empleado empleado : empleados) {
+            System.out.println(empleado);
+        }
+    }
 }
