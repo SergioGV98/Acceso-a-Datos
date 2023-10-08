@@ -1,6 +1,7 @@
 package ejercicio1punto15;
 
 import clases.Empleado;
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,31 +33,24 @@ public class Ejercicio1punto15 {
             new Empleado(3, "632421", "Maria", 2143.61, false)
         };
 
-        try (var os new FileOutputStream("empleados.txt"); var dos = new ObjectOutputStream(os)) {
+        try (var fos = new FileOutputStream("empleados.txt"); var oos = new ObjectOutputStream(fos); var fis = new FileInputStream("empleados.txt"); var ois = new ObjectInputStream(fis)) {
+            // Escribir objetos Empleado en el archivo
             for (Empleado empleado : empl) {
-                dos.writeInt(empleado.getNumEmp());
-                dos.writeUTF(empleado.getDni());
-                dos.writeUTF(empleado.getNombre());
-                dos.writeDouble(empleado.getSalBrutoAnual());
-                dos.writeBoolean(empleado.istParcial());
+                oos.writeObject(empleado);
             }
-/*
+
+            // Leer objetos Empleado del archivo y agregarlos a la lista
             while (true) {
-                int numEmp = oi.readInt();
-                String dni = oi.readUTF();
-                String nombre = oi.readUTF();
-                double salBrutoAnual = oi.readDouble();
-                boolean tParcial = oi.readBoolean();
-                arr.add(new Empleado(numEmp, dni, nombre, salBrutoAnual, tParcial));
+                Empleado empleado = (Empleado) ois.readObject();
+                arr.add(empleado);
             }
-*/
-        } catch (IOException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             System.out.printf("ERROR: %s", ex.getMessage());
         }
-        for (byte i = 0; i < arr.size(); i++) {
-            System.out.println(arr.get(i));
-        }
 
+        for (Empleado empleado : arr) {
+            System.out.println(empleado);
+        }
     }
 
 }
