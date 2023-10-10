@@ -43,9 +43,10 @@ public class DrvFichAccesoAleatorio {
             reg.put("cod_cliente", "103");
             reg.put("dni", "12345678A");
             reg.put("nom_cliente", "ASTORGA");
-            faa.insertar(reg, 1);
+            faa.insertar(reg);
+            //faa.insertar(reg, 1);
             
-            faa.cambiarRegistro(reg, 0, "cod_cliente", "109");
+            faa.cambiarRegistro(0, "cod_cliente", "109");
         } catch (IOException e) {
             System.err.println("Error de E/S: " + e.getMessage());
         }

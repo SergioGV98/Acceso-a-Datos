@@ -51,19 +51,37 @@ public class FicheroAccesoAleatorio {
         }
     }
 
-    public void cambiarRegistro(Map<String, String> reg, long pos, String nomCampo, String nuevoValor) throws IOException {
+    public void cambiarRegistro(long pos, String nomCampo, String nuevoValor) throws IOException {
         try (RandomAccessFile faa = new RandomAccessFile(f, "rws")) {
-            faa.seek(pos * this.longReg);
-            for (int i = 0; i < reg.size(); i++) {
-                Map<String, String> campo = reg.get(reg)
-                if(campo.getClave().contains(nomCampo)){
-                    int longCamp = campo.getValor();
-                    String valorCampoForm = String.format("%1$-" + longCamp + "s", nuevoValor);
-                    faa.write(valorCampoForm.getBytes("UTF-8"), 0, longCamp);
-                }
+            // En caso de que la posicion este fuera del rangon de registro lanzo un throw
+            if (pos < 0 || pos >= numReg) {
+                throw new IllegalArgumentException("La posición especificada está fuera del rango de registros.");
             }
 
-        }
+            long posicionCampo = pos * longReg;
 
+            // Encontrar la posición del campo utilizando un índice
+            int campoIndex = -1;
+            for (int i = 0; i < campos.size(); i++) {
+                if (campos.get(i).getClave().equals(nomCampo)) {
+                    campoIndex = i;
+                    // En caso de que no se encuentre el campo lanzo un throw
+                    if (campoIndex == -1) {
+                        throw new IllegalArgumentException("El campo especificado no se encontró en la lista de campos.");
+                    }
+                    break;
+                }
+                posicionCampo = campos.get(i).getValor();
+                }
+
+            // Mover el puntero al inicio del campo
+            faa.seek(posicionCampo);
+
+            // Cojo el antiguo valor y lo sustituyo por el nuevo
+            String valorCampoForm = String.format("%1$-" + campos.get(campoIndex).getValor() + "s", nuevoValor);
+            // Escribir el nuevo valor en el campo
+            faa.write(valorCampoForm.getBytes("UTF-8"), 0, valorCampoForm.length());
+
+        }
     }
 }
