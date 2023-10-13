@@ -1,6 +1,7 @@
 package fichaccesoaleatorio;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.List;
@@ -35,22 +36,42 @@ public class FicheroAccesoAleatorio {
         insertar(reg, this.numReg++);
     }
 
-    public void insertar(Map<String, String> reg, long pos) throws IOException {
+    // Actividad 1.21
+    public boolean insertar(Map<String, String> reg, long pos) throws IOException {
+        if (pos < 0) {
+            return false;  // Posición negativa, no se cambia nada en el archivo
+        }
+
         try (RandomAccessFile faa = new RandomAccessFile(f, "rws")) {
-            faa.seek(pos * this.longReg);
-            for (Par<String, Integer> campo : this.campos) {
-                String nomCampo = campo.getClave();
-                Integer longCampo = campo.getValor();
-                String valorCampo = reg.get(nomCampo);
-                if (valorCampo == null) {
-                    valorCampo = "";
+            if (pos >= numReg) {
+                // La posición es mayor o igual al número de registros, añadir un nuevo registro al final
+                for (Par<String, Integer> campo : this.campos) {
+                    String valorCampo = reg.get(campo.getClave());
+                    if (valorCampo == null) {
+                        valorCampo = "";
+                    }
+                    String valorCampoForm = String.format("%1$-" + campo.getValor() + "s", valorCampo);
+                    faa.write(valorCampoForm.getBytes("UTF-8"));
                 }
-                String valorCampoForm = String.format("%1$-" + longCampo + "s", valorCampo);
-                faa.write(valorCampoForm.getBytes("UTF-8"), 0, longCampo);
+                numReg++;  // Incrementar el número de registros
+                return true;  // Se añadió un nuevo registro al final
+            } else {
+                // La posición es menor, sobrescribir un registro existente
+                faa.seek(pos * this.longReg);
+                for (Par<String, Integer> campo : this.campos) {
+                    String valorCampo = reg.get(campo.getClave());
+                    if (valorCampo == null) {
+                        valorCampo = "";
+                    }
+                    String valorCampoForm = String.format("%1$-" + campo.getValor() + "s", valorCampo);
+                    faa.write(valorCampoForm.getBytes("UTF-8"));
+                }
+                return true;  // Se sobrescribió un registro existente
             }
         }
     }
 
+    // Actividad 1.17
     public void cambiarRegistro(long pos, String nomCampo, String nuevoValor) throws IOException {
         try (RandomAccessFile faa = new RandomAccessFile(f, "rws")) {
             // En caso de que la posicion este fuera del rangon de registro lanzo un throw
@@ -72,7 +93,7 @@ public class FicheroAccesoAleatorio {
                     break;
                 }
                 posicionCampo = campos.get(i).getValor();
-                }
+            }
 
             // Mover el puntero al inicio del campo
             faa.seek(posicionCampo);
@@ -83,5 +104,76 @@ public class FicheroAccesoAleatorio {
             faa.write(valorCampoForm.getBytes("UTF-8"), 0, valorCampoForm.length());
 
         }
+    }
+
+    // Actividad 1.18
+    public String obtenerValor(long regis, String nomCampo) throws IOException {
+
+        // Verificar que la posición proporcionada es válida
+        if (regis < 0 || regis >= numReg) {
+            return null;  // Posición no válida
+        }
+
+        try (RandomAccessFile faa = new RandomAccessFile(f, "r")) {
+            long posicionRegistro = regis * longReg;
+            int campoIndex = -1;
+
+            for (int i = 0; i < campos.size(); i++) {
+                if (campos.get(i).getClave().equals(nomCampo)) {
+                    campoIndex = i;
+                    break;
+                }
+                // Avanzar la posición de inicio al siguiente campo
+                posicionRegistro = campos.get(i).getValor();
+            }
+
+            if (campoIndex != -1) {
+                faa.seek(posicionRegistro);
+
+                byte[] campoBytes = new byte[campos.get(campoIndex).getValor()];
+                faa.read(campoBytes);
+                return new String(campoBytes, "UTF-8").trim();
+            }
+        }
+        return null;
+    }
+
+    //Actividad 1.19 y 1.20
+    public Integer obtenerRegistro(String nomCampo, String valorBuscado, long posicionInicial) throws IOException {
+        if (nomCampo == null || valorBuscado == null || nomCampo.isEmpty() || posicionInicial < 0) {
+            return null;  // Parámetros incorrectos
+        }
+
+        try (RandomAccessFile faa = new RandomAccessFile(f, "r")) {
+            for (long regis = posicionInicial; regis < numReg; regis++) {
+                long posicionRegistro = regis * longReg;
+
+                int campoIndex = -1;
+                for (int i = 0; i < campos.size(); i++) {
+                    if (campos.get(i).getClave().equals(nomCampo)) {
+                        campoIndex = i;
+                        break;
+                    }
+                    posicionRegistro += campos.get(i).getValor();
+                }
+
+                if (campoIndex != -1) {
+                    faa.seek(posicionRegistro);
+                    byte[] campoBytes = new byte[campos.get(campoIndex).getValor()];
+                    faa.read(campoBytes);
+                    String valorCampo = new String(campoBytes, "UTF-8").trim();
+
+                    if (valorCampo.equals(valorBuscado)) {
+                        return (int) regis; // Se encontró el registro, devuelve la posición
+                    }
+                }
+            }
+            return -1;  // No se encontró un registro con el valor especificado en el campo
+        }
+    }
+
+    //Actividad 1.20
+    public Integer buscarRegistro(String nomCampo, String valorBuscado) throws IOException {
+        return obtenerRegistro(nomCampo, valorBuscado, 0);
     }
 }
