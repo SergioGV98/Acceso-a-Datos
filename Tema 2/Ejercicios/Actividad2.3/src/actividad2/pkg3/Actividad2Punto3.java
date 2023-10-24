@@ -3,7 +3,10 @@ package actividad2.pkg3;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Actividad2Punto3 {
 
@@ -26,10 +29,32 @@ public class Actividad2Punto3 {
         } catch (SQLException e) {
             muestraErrorSQL(e);
         }*/
-        String[] nombres = {"astorga", "benitez", "cerveza"};
-        try (Connection c = DriverManager.getConnection(urlConnection, user, pwd); Statement s = c.createStatement()) {
-            for (byte i = 1; i <= 3; i++) {
-                s.executeUpdate("UPDATE 'pruebasprog'.'clientes' SET 'nom_clente' = '" + nombres[i].toUpperCase() + "' WHERE ('cod_cliente' = '" + i + "');");
+        List<Integer> codigosClientes = new ArrayList<>();
+        List<String> nombresClientes = new ArrayList<>();
+
+        try (Connection c = DriverManager.getConnection(urlConnection, user, pwd); Statement s = c.createStatement();) {
+            ResultSet resultSet = s.executeQuery("SELECT cod_cliente, nom_cliente FROM pruebasprog.clientes");
+            while (resultSet.next()) {
+                int codCliente = resultSet.getInt("cod_cliente");
+                String nombreCliente = resultSet.getString("nom_cliente");
+
+                codigosClientes.add(codCliente);
+                nombresClientes.add(nombreCliente);
+            }
+        } catch (SQLException e) {
+            muestraErrorSQL(e);
+        }
+
+        try (Connection c = DriverManager.getConnection(urlConnection, user, pwd); Statement s = c.createStatement();) {
+            for (int i = 0; i < codigosClientes.size(); i++) {
+                int codCliente = codigosClientes.get(i);
+                String nombreCliente = nombresClientes.get(i);
+
+                String nombreMayusculas = nombreCliente.toUpperCase();
+
+                int filasActualizadas = s.executeUpdate("UPDATE pruebasprog.clientes SET nom_cliente = '" + nombreMayusculas + "' WHERE cod_cliente = " + codCliente);
+
+                System.out.printf("Filas actualizadas para el cliente %d: %d\n", codCliente, filasActualizadas);
             }
         } catch (SQLException e) {
             muestraErrorSQL(e);
