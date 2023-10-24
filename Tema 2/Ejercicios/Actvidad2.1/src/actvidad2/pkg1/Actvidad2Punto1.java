@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Actvidad21 {
+public class Actvidad2Punto1 {
 
     public static void main(String[] args) {
 

@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.SQLException;
 
-public class Actividad22 {
+public class Actividad2Punto2 {
 
     public static void main(String[] args) {
 
@@ -18,14 +18,15 @@ public class Actividad22 {
         String urlConnection = "jdbc:mysql://" + host + ":" + port + "/" + basedatos + parAdic;
         
         int cod_prod = 1;
-        String [] sentencias = {"insert into productos (cod_prod, nom_prod, pr_unit, descr) values ('"+cod_prod+"', 'Cerveza', '0.91', 'Una cerveza de origen italiana.');" +
-                "insert into productos (cod_prod, nom_prod, pr_unit, descr) values ('"+cod_prod+"', 'Aceitunas', '0.5', 'Aceituna española.');"+
-                "insert into productos (cod_prod, nom_prod, pr_unit, descr) values ('"+cod_prod+"', 'Cacahuetes', '1', 'Unos simples cacahuetes.');"};
+        String [] sentencias = {"insert into productos (cod_prod, nom_prod, pr_unit, descr) values (1, 'Cerveza', '0.91', 'Una cerveza de origen italiana.');",
+                "insert into productos (cod_prod, nom_prod, pr_unit, descr) values (2, 'Aceitunas', '0.5', 'Aceituna española.')",
+                "insert into productos (cod_prod, nom_prod, pr_unit, descr) values (3, 'Cacahuetes', '1', 'Unos simples cacahuetes.');"};
 
         try (Connection c = DriverManager.getConnection(urlConnection, user, pwd); Statement s = c.createStatement()) {
            int nFil = 0;
             for(int i = 0; i < sentencias.length; i++){
-                nFil = s.executeUpdate(sentencias[i]);
+                s.executeUpdate(sentencias[i]);
+                nFil++;
                 cod_prod++;
             }
             System.out.printf("%d filas insertadas.\n", nFil);
