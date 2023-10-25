@@ -77,17 +77,16 @@ public class Productos {
 
     public boolean insertDB(Connection c) throws SQLException {
 
-        try (PreparedStatement ps = c.prepareStatement("INSERT INTO 'pruebasprog'.'productos' ('cod_prod', 'nom_prod', 'pr_unit', 'descr') VALUES (?, ?, ?, ?);")) {
+        try (PreparedStatement ps = c.prepareStatement("INSERT INTO productos (cod_prod, nom_prod, pr_unit, descr) VALUES (?,?,?,?);")) {
 
-            
-            ps.setInt(1, 1);
-            ps.setString(2, "HOLA");
-            ps.setDouble(3, 2);
-            ps.setString(4, "HOLA");
-            
+            ps.setInt(1, cod_prod);
+            ps.setString(2, nom_prod);
+            ps.setDouble(3, pr_unit);
+            ps.setString(4, descr);
+
             int row = ps.executeUpdate();
-            if(row >= 1){
-                 System.out.printf("Columnas afectadas: %d\n", row);
+            if (row >= 1) {
+                System.out.printf("Columnas afectadas: %d\n", row);
                 return true;
             }
             return false;
