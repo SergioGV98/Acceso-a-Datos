@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
-public class Cliente {
+public class Clientes {
 
     private int cod_cliente;
     private String dni;
     private String nom_cliente;
 
-    public Cliente(int cod_cliente, String dni, String nom_cliente) {
+    public Clientes(int cod_cliente, String dni, String nom_cliente) {
         this.cod_cliente = cod_cliente;
         this.dni = dni;
         this.nom_cliente = nom_cliente;
@@ -50,7 +50,7 @@ public class Cliente {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Cliente other = (Cliente) obj;
+        final Clientes other = (Clientes) obj;
         if (this.cod_cliente != other.cod_cliente) {
             return false;
         }
@@ -66,12 +66,12 @@ public class Cliente {
         return "Cliente{" + "cod_cliente=" + cod_cliente + ", dni=" + dni + ", nom_cliente=" + nom_cliente + '}';
     }
 
-    public static Cliente getDB(String dni, Connection c) throws SQLException {
+    public static Clientes getDB(String dni, Connection c) throws SQLException {
         try (Statement s = c.createStatement()) {
-            ResultSet rs = s.executeQuery("select * from clientes where dni = '" + dni + "';");
+            ResultSet rs = s.executeQuery("select cod_cliente, dni, nom_cliente from clientes where dni = '" + dni + "';");
             while (rs.next()) {
                 if (rs.getString("dni").equals(dni)) {
-                    Cliente cliente = new Cliente(rs.getInt("cod_cliente"), rs.getString("dni"), rs.getString("nom_cliente"));
+                    Clientes cliente = new Clientes(rs.getInt("cod_cliente"), rs.getString("dni"), rs.getString("nom_cliente"));
                     return cliente;
                 }
             }
