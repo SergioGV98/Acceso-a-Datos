@@ -1,7 +1,10 @@
 package actividad2.pkg6;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.Objects;
@@ -91,6 +94,6 @@ public class Productos {
             }
             return false;
         }
-
     }
+
 }
