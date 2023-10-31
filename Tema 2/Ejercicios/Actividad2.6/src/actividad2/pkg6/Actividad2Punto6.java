@@ -48,19 +48,10 @@ public class Actividad2Punto6 {
                 while ((linea = br.readLine()) != null) {
                     try (PreparedStatement ps = c.prepareStatement("INSERT INTO productos (cod_prod, nom_prod, pr_unit, descr) VALUES (?,?,?,?);")) {
                         String[] campos = linea.split("\\|");
-                        String cod_prod = "";
-                        String nom_prod = "";
-                        for(int i = 0; i < campos.length; i++){
-                            cod_prod = campos[0];
-                            nom_prod = campos[1];
-                        }
-
-                        /*
-                         ps.setInt(1, Integer.parseInt(campo));
-                            ps.setString(2, campo);
-                            ps.setDouble(3, Double.parseDouble(campo));
-                            ps.setString(4, campo);
-                        */
+                        ps.setInt(0, Integer.parseInt(campos[0]));
+                        ps.setString(1, campos[1]);
+                        ps.setDouble(2, Double.parseDouble(campos[2]));
+                        ps.setString(3, null);
                     }
                 }
             }
