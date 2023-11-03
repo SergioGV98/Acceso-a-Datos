@@ -1,12 +1,15 @@
 package actividad2.pkg6;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Actividad2Punto6 {
 
@@ -40,24 +43,14 @@ public class Actividad2Punto6 {
             muestraErrorSQL(e);
         }*/
         try (Connection c = DriverManager.getConnection(urlConnection, user, pwd)) {
-
-            try (var fr = new FileReader("productos.csv"); var br = new BufferedReader(fr)) {
-
-                String linea;
-
-                while ((linea = br.readLine()) != null) {
-                    try (PreparedStatement ps = c.prepareStatement("INSERT INTO productos (cod_prod, nom_prod, pr_unit, descr) VALUES (?,?,?,?);")) {
-                        String[] campos = linea.split("\\|");
-                        ps.setInt(0, Integer.parseInt(campos[0]));
-                        ps.setString(1, campos[1]);
-                        ps.setDouble(2, Double.parseDouble(campos[2]));
-                        ps.setString(3, null);
-                    }
-                }
-            }
-        } catch (IOException | SQLException e) {
-            System.out.printf("ERROR: %s\n", e.getMessage());
+            Productos producto = new Productos();
+            producto.insertCSVDB(c, "productos.csv");
+        } catch (SQLException e) {
+            muestraErrorSQL(e);
+        } catch (IOException ex) {
+            System.out.printf("ERROR: %s\n", ex.getMessage());
         }
+
     }
 
     public static void muestraErrorSQL(SQLException e) {

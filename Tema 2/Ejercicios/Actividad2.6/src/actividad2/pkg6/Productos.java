@@ -1,10 +1,12 @@
 package actividad2.pkg6;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.Objects;
@@ -21,6 +23,10 @@ public class Productos {
         this.nom_prod = nom_prod;
         this.pr_unit = pr_unit;
         this.descr = descr;
+    }
+    
+    public Productos(){
+        
     }
 
     public int getCod_prod() {
@@ -94,6 +100,27 @@ public class Productos {
             }
             return false;
         }
+    }
+
+    public void insertCSVDB(Connection c, String csv) throws FileNotFoundException, IOException, SQLException {
+
+        try (var fr = new FileReader(csv); var br = new BufferedReader(fr)) {
+
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+                try (PreparedStatement ps = c.prepareStatement("INSERT INTO productos (cod_prod, nom_prod, pr_unit, descr) VALUES (?,?,?,?);")) {
+                    String[] campos = linea.split("\\|");
+                    int i = 1;
+                    ps.setInt(i++, Integer.parseInt(campos[0]));
+                    ps.setString(i++, campos[1]);
+                    ps.setDouble(i++, Double.parseDouble(campos[2]));
+                    ps.setString(i++, campos[3]);
+                    ps.execute();
+                }
+            }
+        }
+        
     }
 
 }
