@@ -1,4 +1,4 @@
-package actvidad2.pkg1;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;

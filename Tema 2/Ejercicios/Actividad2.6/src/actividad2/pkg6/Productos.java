@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.Objects;
@@ -24,9 +22,9 @@ public class Productos {
         this.pr_unit = pr_unit;
         this.descr = descr;
     }
-    
-    public Productos(){
-        
+
+    public Productos() {
+
     }
 
     public int getCod_prod() {
@@ -102,25 +100,45 @@ public class Productos {
         }
     }
 
-    public void insertCSVDB(Connection c, String csv) throws FileNotFoundException, IOException, SQLException {
+    public int insertCSVDB(Connection c, String csv) throws FileNotFoundException, IOException, SQLException {
 
         try (var fr = new FileReader(csv); var br = new BufferedReader(fr)) {
 
             String linea;
+            int productos = 0;
 
             while ((linea = br.readLine()) != null) {
                 try (PreparedStatement ps = c.prepareStatement("INSERT INTO productos (cod_prod, nom_prod, pr_unit, descr) VALUES (?,?,?,?);")) {
                     String[] campos = linea.split("\\|");
+                    
                     int i = 1;
+                    // Este valor siempre debe existir
                     ps.setInt(i++, Integer.parseInt(campos[0]));
-                    ps.setString(i++, campos[1]);
+                    
+                    // Compruebo si campo 1 (nombre) es presente en la linea y no esta vacio, si es asi lo mando a la base de datos, si no mando una cadena vacia.
+                    if (campos.length >= 2 && !campos[1].isEmpty()){
+                         ps.setString(i++, campos[1]);
+                    } else {
+                         ps.setString(i++, "");
+                    }
+                    
+                    if (campos.length >= 3 && !campos[2].isEmpty()) {
                     ps.setDouble(i++, Double.parseDouble(campos[2]));
-                    ps.setString(i++, campos[3]);
-                    ps.execute();
+                    } else {
+                        ps.setDouble(i++, 0.0);
+                    }
+                    
+                    if (campos.length >= 4) {
+                        ps.setString(i++, campos[3]);
+                    } else {
+                        ps.setString(i++, "");
+                    }
+                    productos += ps.executeUpdate();
                 }
             }
+            return productos;
         }
-        
+
     }
 
 }

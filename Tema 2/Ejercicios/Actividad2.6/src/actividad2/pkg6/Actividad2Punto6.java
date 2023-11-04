@@ -44,7 +44,8 @@ public class Actividad2Punto6 {
         }*/
         try (Connection c = DriverManager.getConnection(urlConnection, user, pwd)) {
             Productos producto = new Productos();
-            producto.insertCSVDB(c, "productos.csv");
+            int productosInsertados = producto.insertCSVDB(c, "productos.csv");
+            System.out.printf("Productos insertados %d\n", productosInsertados);
         } catch (SQLException e) {
             muestraErrorSQL(e);
         } catch (IOException ex) {
