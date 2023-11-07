@@ -49,10 +49,10 @@ public class Actividad2_9 {
                 i = 1;
                 sInsertLinFact.setInt(i++, numFact);
                 sInsertLinFact.setInt(i++, lineaFact++);
-               // sInsertLinFact.setInt(i++, 2); // Código de producto
-                sInsertLinFact.setInt(i++, 12); // Código de producto para provocar fallo
-                sInsertLinFact.setDouble(i++, 120); // Cantidad
-                sInsertLinFact.setDouble(i++, 3.15); // precio unitario
+                sInsertLinFact.setInt(i++, 2); // Código de producto
+                //sInsertLinFact.setInt(i++, 12); Código de producto para provocar fallo
+                sInsertLinFact.setDouble(i++, 120); 
+                sInsertLinFact.setDouble(i++, 3.15); 
                 sInsertLinFact.executeUpdate();
                 
                 c.commit();

@@ -74,22 +74,28 @@ public class Cuenta {
 
     }
 
-    public boolean ingreso(Connection c, double cant) throws SQLException { // Cant tiene que se mayor comprobarlo
-        try (PreparedStatement sUpdate = c.prepareStatement("update cuentas set saldo_inicial = saldo_inicial + ? where numero_cuenta = ?")) {
-            sUpdate.setDouble(1, cant);
-            sUpdate.setString(2, this.numeroCuenta);
-            int rowCount = sUpdate.executeUpdate();
-            return rowCount > 0;
+    public boolean ingreso(Connection c, double cant) throws SQLException {
+        if (this.saldoInicial >= cant) {
+            try (PreparedStatement sUpdate = c.prepareStatement("update cuentas set saldo_inicial = saldo_inicial + ? where numero_cuenta = ?")) {
+                sUpdate.setDouble(1, cant);
+                sUpdate.setString(2, this.numeroCuenta);
+                int rowCount = sUpdate.executeUpdate();
+                return rowCount > 0;
+            }
         }
+        return false;
     }
 
-    public boolean retirada(Connection c, double cant) throws SQLException { // Cantidad no puede ser mayor comprobarlo
-        try (PreparedStatement sUpdate = c.prepareStatement("update cuentas set saldo_inicial = saldo_inicial - ? where numero_cuenta = ?")) {
-            sUpdate.setDouble(1, cant);
-            sUpdate.setString(2, this.numeroCuenta);
-            int rowCount = sUpdate.executeUpdate();
-            return rowCount > 0;
+    public boolean retirada(Connection c, double cant) throws SQLException {
+        if (this.saldoInicial <= cant) {
+            try (PreparedStatement sUpdate = c.prepareStatement("update cuentas set saldo_inicial = saldo_inicial - ? where numero_cuenta = ?")) {
+                sUpdate.setDouble(1, cant);
+                sUpdate.setString(2, this.numeroCuenta);
+                int rowCount = sUpdate.executeUpdate();
+                return rowCount > 0;
+            }
         }
+        return false;
     }
 
     public boolean transferenciaHacia(Connection c, Cuenta cuentaDest, double cant) {
@@ -104,7 +110,6 @@ public class Cuenta {
                 p.setString(2, cuentaDest.getNumeroCuenta());
                 p.executeUpdate();
 
-                // Realizar el commit explícito
                 c.commit();
                 return true;
             }
@@ -131,11 +136,10 @@ public class Cuenta {
             if (cuentaOrig.getSaldoInicial() >= cant) {
                 cuentaOrig.setSaldoInicial(cuentaOrig.getSaldoInicial() - cant);
 
-                p.setDouble(1, cant); // Restar la cantidad al saldo_inicial
+                p.setDouble(1, cant);
                 p.setString(2, cuentaOrig.getNumeroCuenta());
                 p.executeUpdate();
 
-                // Realizar el commit explícito
                 c.commit();
                 return true;
             }

@@ -19,7 +19,7 @@ public class Actividad2_12 {
         ArrayList<Cuenta> cuentas = new ArrayList<>();
 
         try (Connection c = DriverManager.getConnection(urlConnection, user, pwd)) {
-            /*
+            /* PROBAR METODOS DE INGRESO Y RETIRADA
             String[] cuentas = {"ES1234567890123456789012", "ES9812345678901234567890", "GB92BARC2000527584985521", "US1234567890123456789012"};
 
             Cuenta cuenta = Cuenta.getDB(c, "ES1234567890123456789012");
