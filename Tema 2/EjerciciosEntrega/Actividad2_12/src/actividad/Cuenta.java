@@ -50,7 +50,7 @@ public class Cuenta {
 
     }
 
-    public boolean ingreso(Connection c, double cant) throws SQLException {
+    public boolean ingreso(Connection c, double cant) throws SQLException { // Cant tiene que se mayor comprobarlo
         try (PreparedStatement sUpdate = c.prepareStatement("update cuentas set saldo_inicial = saldo_inicial + ? where numero_cuenta = ?")) {
             sUpdate.setDouble(1, cant);
             sUpdate.setString(2, this.numeroCuenta);
@@ -59,7 +59,7 @@ public class Cuenta {
         }
     }
 
-    public boolean retirada(Connection c, double cant) throws SQLException {
+    public boolean retirada(Connection c, double cant) throws SQLException { // Cantidad no puede ser mayor comprobarlo
         try (PreparedStatement sUpdate = c.prepareStatement("update cuentas set saldo_inicial = saldo_inicial - ? where numero_cuenta = ?")) {
             sUpdate.setDouble(1, cant);
             sUpdate.setString(2, this.numeroCuenta);
@@ -69,7 +69,15 @@ public class Cuenta {
     }
     
     public boolean transferenciaHacia(Connection c, Cuenta cuentaDest, double cant){
-        
+        /*
+        DELIMITER //
+        CREATE PROCEDURE transaccion (dinero INTEGER, num_cuenta_origen VARCHAR(155), num_cuenta_destino VARCHAR(155))
+        BEGIN
+            update cuentas set saldo_inicial = saldo_inicial - dinero where numero_cuenta = num_cuenta_origen;
+            update cuentas set saldo_inicial = saldo_inicial + dinero where numero_cuenta = num_cuenta_destino;
+        END //
+        DELIMITER ;
+        */
         
         
         
