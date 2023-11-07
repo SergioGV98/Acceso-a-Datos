@@ -18,6 +18,30 @@ public class Cuenta {
         this.saldoInicial = saldoInicial;
     }
 
+    public String getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public double getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(double saldoInicial) {
+        this.saldoInicial = saldoInicial;
+    }
+
     @Override
     public String toString() {
         return "Cuenta{" + "numeroCuenta=" + numeroCuenta + ", moneda=" + moneda + ", saldoInicial=" + saldoInicial + '}';
@@ -67,30 +91,74 @@ public class Cuenta {
             return rowCount > 0;
         }
     }
-    
-    public boolean transferenciaHacia(Connection c, Cuenta cuentaDest, double cant){
-        /*
-        DELIMITER //
-        CREATE PROCEDURE transaccion (dinero INTEGER, num_cuenta_origen VARCHAR(155), num_cuenta_destino VARCHAR(155))
-        BEGIN
-            update cuentas set saldo_inicial = saldo_inicial - dinero where numero_cuenta = num_cuenta_origen;
-            update cuentas set saldo_inicial = saldo_inicial + dinero where numero_cuenta = num_cuenta_destino;
-        END //
-        DELIMITER ;
-        */
-        
-        
-        
-        
-        
-        
+
+    public boolean transferenciaHacia(Connection c, Cuenta cuentaDest, double cant) {
+        try (PreparedStatement p = c.prepareStatement("UPDATE cuentas SET saldo_inicial = saldo_inicial + ? WHERE numero_cuenta = ?")) {
+            c.setAutoCommit(false);
+
+            if (this.getSaldoInicial() >= cant) {
+                this.setSaldoInicial(this.getSaldoInicial() - cant);
+                cuentaDest.setSaldoInicial(cuentaDest.getSaldoInicial() + cant);
+
+                p.setDouble(1, cuentaDest.getSaldoInicial());
+                p.setString(2, cuentaDest.getNumeroCuenta());
+                p.executeUpdate();
+
+                // Realizar el commit explícito
+                c.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            muestraErrorSQL(ex);
+        } catch (Exception ex) {
+            System.out.printf("ERROR: %s\n", ex.getMessage());
+
+            try {
+                c.rollback();
+                System.out.println("Se hace ROLLBACK");
+            } catch (SQLException exr) {
+                System.out.printf("ERROR en rollback: %s.\n", exr.getMessage());
+            }
+        }
+
         return false;
     }
-    
-    public boolean transferenciaDesde(Connection c, Cuenta cuentaOrig, double cant){
-        
-        
+
+    public boolean transferenciaDesde(Connection c, Cuenta cuentaOrig, double cant) {
+        try (PreparedStatement p = c.prepareStatement("UPDATE cuentas SET saldo_inicial = saldo_inicial - ? WHERE numero_cuenta = ?")) {
+            c.setAutoCommit(false);
+
+            if (cuentaOrig.getSaldoInicial() >= cant) {
+                cuentaOrig.setSaldoInicial(cuentaOrig.getSaldoInicial() - cant);
+
+                p.setDouble(1, cant); // Restar la cantidad al saldo_inicial
+                p.setString(2, cuentaOrig.getNumeroCuenta());
+                p.executeUpdate();
+
+                // Realizar el commit explícito
+                c.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            muestraErrorSQL(ex);
+        } catch (Exception ex) {
+            System.out.printf("ERROR: %s\n", ex.getMessage());
+
+            try {
+                c.rollback();
+                System.out.println("Se hace ROLLBACK");
+            } catch (SQLException exr) {
+                System.out.printf("ERROR en rollback: %s.\n", exr.getMessage());
+            }
+        }
+
         return false;
+    }
+
+    public static void muestraErrorSQL(SQLException e) {
+        System.out.printf("SQL ERROR mensaje: %s\n", e.getMessage());
+        System.out.printf("SQL Estado: %s\n", e.getSQLState());
+        System.out.printf("SQL código específico: %s\n", e.getErrorCode());
     }
 
 }

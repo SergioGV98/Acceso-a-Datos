@@ -3,6 +3,8 @@ package actividad;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Actividad2_12 {
 
@@ -12,86 +14,64 @@ public class Actividad2_12 {
         String pwd = "usupruebasprog";
         String host = "localhost";
         String port = "3306";
-        String parAdic = "";
         String urlConnection = "jdbc:mysql://" + host + ":" + port + "/" + basedatos;
 
+        ArrayList<Cuenta> cuentas = new ArrayList<>();
+
         try (Connection c = DriverManager.getConnection(urlConnection, user, pwd)) {
-            
-            String [] cuentas = {"ES1234567890123456789012", "ES9812345678901234567890", "GB92BARC2000527584985521", "US1234567890123456789012"};
+            /*
+            String[] cuentas = {"ES1234567890123456789012", "ES9812345678901234567890", "GB92BARC2000527584985521", "US1234567890123456789012"};
 
             Cuenta cuenta = Cuenta.getDB(c, "ES1234567890123456789012");
             System.out.println(cuenta.toString());
-            
-            if(cuenta.ingreso(c, 123.11)){
+
+            if (cuenta.ingreso(c, 123.11)) {
                 System.out.println("Ingreso realizado");
             } else {
                 System.out.println("Ingreso fallido");
             }
-            
-            if(cuenta.retirada(c, 123.11)){
+
+            if (cuenta.retirada(c, 123.11)) {
                 System.out.println("Retirada realizada");
             } else {
                 System.out.println("Retirada fallida");
-            }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            /*
-            Object[][] datosCuentas = {
-                {"ES9812345678901234567890", "EUR", 2354.32},
-                {"GB92BARC2000527584985521", "GBP", 5634.32},
-                {"ES1234567890123456789012", "EUR", 1568.12},
-                {"US1234567890123456789012", "USD", 9874.90},
-                {"FR1234567890123456789012", "EUR", 655.15}
-            };
-            c.setAutoCommit(false);
+            }*/
 
-            for (Object[] datosCuenta : datosCuentas) {
+            cuentas.add(Cuenta.getDB(c, "ES1234567890123456789012"));
+            cuentas.add(Cuenta.getDB(c, "ES9812345678901234567890"));
+            cuentas.add(Cuenta.getDB(c, "GB92BARC2000527584985521"));
+            cuentas.add(Cuenta.getDB(c, "US1234567890123456789012"));
 
-                String numeroCuenta = (String) datosCuenta[0];
-                String moneda = (String) datosCuenta[1];
-                double saldoInicial = (double) datosCuenta[2];
+            int transferenciasIntentadas = 0;
+            int transferenciasExitosas = 0;
 
-                Cuenta cuenta = new Cuenta(numeroCuenta, moneda, saldoInicial);
+            Random r = new Random();
 
-                try {
-                    if (cuenta.insertDB(c)) {
-                        System.out.printf("Cuenta %s, moneda %s, saldo inicial %f creada con éxito.\n",
-                                numeroCuenta, moneda, saldoInicial);
-                    } else {
-                        System.out.println("Error al crear la cuenta.");
-                    }
-                } catch (Exception ex) {
-                    if (ex instanceof SQLException) {
-                        muestraErrorSQL((SQLException) ex);
-                    } else {
-                        System.out.printf("ERROR: %s\n", ex.getMessage());
-                    }
+            for (int i = 0; i < 5000; i++) {
+                Cuenta cuentaOrigen = cuentas.get(r.nextInt(cuentas.size()));
+                Cuenta cuentaDestino = cuentas.get(r.nextInt(cuentas.size()));
 
-                    try {
-                        c.rollback();
-                        System.out.println("Se hace ROLLBACK");
-                    } catch (SQLException exr) {
-                        System.out.printf("ERROR en rollback: %s.\n", exr.getMessage());
+                double cantidad = (double) (r.nextInt(100001)) / 100.0;
+
+                boolean exitoOrigen = cuentaOrigen.transferenciaHacia(c, cuentaDestino, cantidad);
+                if (exitoOrigen) {
+                    boolean exitoDestino = cuentaDestino.transferenciaHacia(c, cuentaOrigen, cantidad);
+                    if (exitoDestino) {
+                        transferenciasExitosas++;
                     }
                 }
+                transferenciasIntentadas++;
             }
-            c.commit();*/
+
+            System.out.println("Número de transferencias intentadas: " + transferenciasIntentadas);
+            System.out.println("Número de transferencias exitosas: " + transferenciasExitosas);
+
+            for (Cuenta cuenta : cuentas) {
+                Cuenta cuentaActual = Cuenta.getDB(c, cuenta.getNumeroCuenta());
+                System.out.println("Cuenta: " + cuentaActual.getNumeroCuenta());
+                System.out.println("Moneda: " + cuentaActual.getMoneda());
+                System.out.println("Saldo final: " + cuentaActual.getSaldoInicial());
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
