@@ -21,30 +21,47 @@ public class Actividad_2_16 {
             /*
             DELIMITER //
             CREATE PROCEDURE transferencia
-            (IN in_numero_cuenta VARCHAR(24), IN in_dinero decimal(10,2))
-            BEGIN
-                UPDATE cuentas SET saldo_inicial = saldo_inicial - in_dinero WHERE numero_cuenta = in_numero_cuenta;
+            (IN in_numero_cuenta_origen VARCHAR(24), IN in_numero_cuenta_destino VARCHAR(24), IN in_dinero decimal(10,2), 
+             OUT out_resultado int)
+            sp: BEGIN
+            declare saldo_origen decimal(10,2);
+            declare cuenta_origen varchar(24);
+            declare cuenta_destino varchar(24);
+            SELECT saldo_inicial into saldo_origen from cuentas where numero_cuenta = in_numero_cuenta_origen;
+            SELECT numero_cuenta into cuenta_origen from cuentas where numero_cuenta = in_numero_cuenta_destino;
+            SELECT numero_cuenta into cuenta_destino from cuentas where numero_cuenta = in_numero_cuenta_destino;
+
+                    select out_resultado = -1;
+                    if cuenta_origen like in_numero_cuenta_origen AND cuenta_destino like in_numero_cuenta_destino then
+                select out_resultado = 0;
+                            if saldo_origen >= in_dinero then
+                                    UPDATE cuentas SET saldo_inicial = saldo_inicial - in_dinero WHERE numero_cuenta = in_numero_cuenta_origen;
+                                    UPDATE cuentas SET saldo_inicial = saldo_inicial + in_dinero WHERE numero_cuenta = in_numero_cuenta_destino;
+                            end if;
+                end if;
+                select out_resultado = 1;
             END //
             DELIMITER ;
-            */
-            
-            String numeroCuenta = "ES1234567890123456789012";
-            double dinero = 120;
-            
-            try(CallableStatement s = c.prepareCall("{call transferencia(?, ?)}")){
+             */
+            double dinero = 100000;
+
+            try (CallableStatement s = c.prepareCall("{call transferencia(?, ?, ?, ?)}")) {
+
+                int i = 1;
                 
-                
-                
-                s.setString(1, numeroCuenta);
-                s.setDouble(2, dinero);
-                
-                
-                
+                s.setString(i++, "ES1234567890123456789012");
+                s.setString(i++, "ES9812345678901234567890");
+                s.setDouble(i++, dinero);
+                s.registerOutParameter(i, java.sql.Types.INTEGER);
+                s.execute();
+
+                int cod_nuevo_prod = s.getInt(i);
+
+                System.out.printf(
+                        "Código asignado al nuevo producto: %s.\n", cod_nuevo_prod);
+
             }
-            
-            
-            
-            
+
         } catch (SQLException e) {
             muestraErrorSQL(e);
         }
