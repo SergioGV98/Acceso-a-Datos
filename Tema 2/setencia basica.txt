@@ -4,3 +4,58 @@ CREATE TABLE cuentas (
     saldo_inicial DECIMAL(10, 2),
     FOREIGN KEY (moneda) REFERENCES monedas (cod_monedas)
 );
+
+
+UPDATE tabla SET columna1 = nuevo_valor WHERE condicion;
+
+SELECT SUM(columna) FROM tabla;
+
+SELECT columna1 - columna2 AS resultado FROM tabla;
+
+SELECT columna1 * columna2 AS resultado FROM tabla;
+
+SELECT columna1 / columna2 AS resultado FROM tabla WHERE columna2 <> 0;
+
+SELECT AVG(columna1 + columna2) AS media_total FROM tabla;
+
+SELECT columna1, columna2 FROM tabla ORDER BY columna1 DESC;
+
+SELECT columna, COUNT(*) FROM tabla GROUP BY columna;
+
+SELECT columna, COUNT(*) FROM tabla GROUP BY columna HAVING COUNT(*) > 1;
+
+SELECT t1.columna1, t2.columna2 FROM tabla1 t1 INNER JOIN tabla2 t2 ON t1.id = t2.id;
+
+SELECT DISTINCT columna FROM tabla;
+
+SELECT columna FROM tabla WHERE columna LIKE 'patron%';
+
+SELECT columna, 
+       CASE 
+          WHEN columna > 10 THEN 'Mayor que 10'
+          ELSE 'Menor o igual a 10'
+       END AS resultado
+FROM tabla;
+
+SELECT columna FROM tabla LIMIT 10;
+
+SELECT COUNT(*) FROM tabla;
+
+SELECT MIN(columna) AS minimo, MAX(columna) AS maximo FROM tabla;
+
+SELECT columna FROM tabla WHERE columna BETWEEN 10 AND 20;
+
+SELECT columna FROM tabla WHERE columna IN (valor1, valor2, valor3);
+
+SELECT columna FROM tabla WHERE columna IS NULL;
+
+SELECT UPPER(columna) AS mayusculas, LOWER(columna) AS minusculas FROM tabla;
+
+
+
+
+
+
+
+
+

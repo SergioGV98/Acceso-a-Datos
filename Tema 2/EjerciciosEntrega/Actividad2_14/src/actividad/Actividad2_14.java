@@ -15,9 +15,9 @@ public class Actividad2_14 {
         String host = "localhost";
         String port = "3306";
         String urlConnection = "jdbc:mysql://" + host + ":" + port + "/" + basedatos;
-        
+
         try (Connection c = DriverManager.getConnection(urlConnection, user, pwd)) {
-            System.out.printf("Facturas del cliente con DNI %s: %d\n", "12345678A", numeroFacturas(c, "12345678A"));
+            System.out.printf("Facturas del cliente con DNI %s: %d\n", "34567890C", numeroFacturas(c, "34567890C"));
         } catch (SQLException e) {
             muestraErrorSQL(e);
         }
@@ -33,21 +33,26 @@ public class Actividad2_14 {
     public static int numeroFacturas(Connection c, String dni) throws SQLException {
         /*
         DELIMITER //
-        CREATE FUNCTION numero_facturas (in_dni varchar(24))
+        CREATE FUNCTION numero_facturas (in_dni VARCHAR(24))
         RETURNS INTEGER DETERMINISTIC
         BEGIN
             DECLARE num_fact INTEGER;
-            SELECT COUNT(num_factura) into num_fact FROM facturas where dni = in_dni;
-            RETURN(num_fact);
+            SELECT COUNT(num_factura) INTO num_fact
+            FROM facturas
+            INNER JOIN clientes ON facturas.cod_cliente = clientes.cod_cliente
+            WHERE clientes.dni = in_dni;
+            RETURN num_fact;
         END //
         DELIMITER ;
          */
-        PreparedStatement ps = c.prepareStatement("select numero_facturas(?)");
-        ps.setString(1, dni);
+        try (PreparedStatement ps = c.prepareStatement("select numero_facturas(?)");) {
+            ps.setString(1, dni);
 
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        return rs.getInt(1);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        }
+
     }
 
 }

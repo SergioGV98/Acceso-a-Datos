@@ -22,11 +22,10 @@ public class Actividad2_13 {
         } catch (SQLException e) {
             muestraErrorSQL(e);
         }
-        
+
     }
 
     public static void borrarCliente(Connection c, String dni) throws SQLException {
-        // BORRAR UN CLIENTE
         /*
         DELIMITER //
         CREATE PROCEDURE borrar_cliente (in_dni varchar(24))
@@ -35,11 +34,12 @@ public class Actividad2_13 {
         END //
         DELIMITER ;
          */
-        CallableStatement s = c.prepareCall("{call borrar_cliente(?)}");
-        s.setString(1, dni);
-        s.execute();
+        try (CallableStatement s = c.prepareCall("{call borrar_cliente(?)}")) {
+            s.setString(1, dni);
+            s.execute();
+        }
     }
-    
+
     public static void muestraErrorSQL(SQLException e) {
         System.out.printf("SQL ERROR mensaje: %s\n", e.getMessage());
         System.out.printf("SQL Estado: %s\n", e.getSQLState());
