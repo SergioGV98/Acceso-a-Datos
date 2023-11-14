@@ -1,10 +1,12 @@
 package repasoacdt2;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import static repasoacdt2.Libro.ingresarLibrosCSV;
 
 public class RepasoACDT2 {
 
@@ -91,6 +93,55 @@ public class RepasoACDT2 {
             } catch (SQLException e) {
                 System.out.printf("ERROR: %s\n", e.getMessage());
             }
+            System.out.println();
+
+            // Insertar CSV mediante funcion
+            System.out.println("--------------------------INSERTAR CSV MEDIANTE FUNCION--------------------------");
+            try {
+                if (ingresarLibrosCSV(c, "libros.csv")) { //Podria hacer lo que hace esta funcion en el main
+                    System.out.println("Libros ingresados correctamente");
+                }
+            } catch (IOException ex) {
+                System.out.printf("ERROR: %s\n", ex.getMessage());
+            }
+            System.out.println();
+
+            // Consultar Genero mediante claves foraneas
+            System.out.println("--------------------------CONSULTAR EL GENERO DE UN LIBRO MEDIANTE SU NOMBRE--------------------------");
+            String libroGenero = Libro.consultarGeneroLibro(c, "El Imperio Final");
+            System.out.println(libroGenero);
+            System.out.println();
+
+            // Consultar Autor mediante claves foraneas
+            System.out.println("--------------------------CONSULTAR EL AUTOR DE UN LIBRO MEDIANTE SU NOMBRE--------------------------");
+            String libroAutor = Libro.consultarAutorLibro(c, "El Imperio Final");
+            System.out.println(libroAutor);
+            System.out.println();
+
+            // Convertir los titulos de los libros a MAYUSCULAS
+            System.out.println("--------------------------CONVERTIR TODOS LOS TITULOS DE LOS LIBROS A MAYUSCULAS--------------------------");
+            if (Libro.convertirTitulosMayusculas(c)) {
+                System.out.println("Titulos convertidos con exito");
+            }
+            System.out.println();
+
+            // Insertar prestamos en la BD
+            System.out.println("--------------------------INSERTAR PRESTAMOS EN LA BD--------------------------");
+            int[] prestamoIDS = {1, 2, 3, 4, 5, 6};
+            int[] libroIDS = {3, 6, 9, 12, 15, 18};
+            String[] fechaPrestamo = {"2023-11-01", "2023-11-02", "2023-11-03", "2023-11-04", "2023-11-05", "2023-11-06"};
+            String[] fechaDevolucion = {"2023-11-10", "2023-11-11", "2023-11-12", "2023-11-13", "2023-11-14", "2023-11-15"};
+            int filasAfectadas = 0;
+
+            for (int i = 0; i < prestamoIDS.length; i++) {
+                try {
+                    filasAfectadas += Prestamo.insertDB(c, prestamoIDS[i], libroIDS[i], fechaPrestamo[i], fechaDevolucion[i]);
+                } catch (SQLException e) {
+                    System.out.println("Error al insertar el registro " + prestamoIDS[i] + ": " + e.getMessage());
+                }
+            }
+
+            System.out.printf("Filas insertadas %d\n", filasAfectadas);
             System.out.println();
 
         } catch (SQLException e) {

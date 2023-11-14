@@ -90,7 +90,7 @@ public class Autor {
         return null;
     }
 
-    public ArrayList<String> autoresOrdenadosAlfabeticamente(Connection c) throws SQLException {
+    public ArrayList<String> autoresOrdenadosAlfabeticamente(Connection c) throws SQLException { // Con Statement tambien valdria y seria mas adecuada al ser una consulta estatica.
         ArrayList<String> autoresOrdenados = new ArrayList<String>();
         try (PreparedStatement ps = c.prepareStatement("SELECT AutorID, Nombre, Nacionalidad FROM Autores ORDER BY Nombre ASC;")) {
 
