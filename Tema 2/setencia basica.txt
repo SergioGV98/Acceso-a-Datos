@@ -1,3 +1,5 @@
+\\|
+
 CREATE TABLE cuentas (
     numero_cuenta CHAR(24) PRIMARY KEY,
     moneda CHAR(3),
