@@ -7,7 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.util.Calendar;
 
 public class Ejercicio2 {
     public static void main(String[] args) {
@@ -19,15 +20,19 @@ public class Ejercicio2 {
             Transaction t = null;
             try {
                 t = s.beginTransaction();
-                //Sede sede = new Sede();
-                //sede.setNomSede("Alcantarilla");
-                //s.save(sede);
+
+                Sede sede = new Sede();
+                sede.setNomSede("Alcantarilla");
+                s.save(sede);
+
                 Proyecto proyecto = new Proyecto();
-                proyecto.setfInicio(LocalDateTime.of(1998, 12, 1).toLocalDate());
+                proyecto.setfInicio(new Date(1998, Calendar.DECEMBER, 1));
                 proyecto.setfFin(new Date(2014, Calendar.FEBRUARY, 14));
                 proyecto.setNomProy("Proyecto Android");
                 s.save(proyecto);
+
                 t.commit();
+                System.out.println("Datos introducidos correctamente.");
             } catch (Exception ex) {
                 ex.printStackTrace(System.err);
                 if (t != null) {
@@ -39,18 +44,3 @@ public class Ejercicio2 {
 
     }
 }
-
-/*
-RECUPERAR CLIENTE
-int idCliente = 3;
-Cliente cl = s.get(Cliente.class, idCliente);
-
- */
-
-/*
-UPDATE CLIENTE
-int cliente = 3;
-Client cl = s.get(Cliente.class, idClientE);
-cl.setNomCliente("IBAÑEZ");
-s.
- */

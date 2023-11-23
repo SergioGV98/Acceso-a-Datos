@@ -75,4 +75,14 @@ public class Proyecto {
         result = 31 * result + (nomProy != null ? nomProy.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Proyecto{" +
+                "idProy=" + idProy +
+                ", fInicio=" + fInicio +
+                ", fFin=" + fFin +
+                ", nomProy='" + nomProy + '\'' +
+                '}';
+    }
 }

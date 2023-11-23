@@ -60,4 +60,13 @@ public class Empleado {
         result = 31 * result + (idDepto != null ? idDepto.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Empleado{" +
+                "dni='" + dni + '\'' +
+                ", nomEmp='" + nomEmp + '\'' +
+                ", idDepto=" + idDepto +
+                '}';
+    }
 }

@@ -47,4 +47,12 @@ public class Sede {
         result = 31 * result + (nomSede != null ? nomSede.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Sede{" +
+                "idSede=" + idSede +
+                ", nomSede='" + nomSede + '\'' +
+                '}';
+    }
 }
