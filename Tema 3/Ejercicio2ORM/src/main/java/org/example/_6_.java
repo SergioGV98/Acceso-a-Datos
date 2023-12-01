@@ -18,7 +18,7 @@ public class _6_ {
             try {
                 t = s.beginTransaction();
 
-                Sede sede = s.get(Sede.class, 3);
+                Sede sede = s.get(Sede.class, 2);
 
                 Departamento marketing = new Departamento();
                 marketing.setNomDepto("DP Marketing Riot Games");
@@ -27,7 +27,7 @@ public class _6_ {
 
                 Departamento programacion = new Departamento();
                 programacion.setNomDepto("DP Programacion Montrereal");
-                sede = s.get(Sede.class, 2);
+                sede = s.get(Sede.class, 1);
                 programacion.setSedeByIdSede(sede);
                 s.save(programacion);
 

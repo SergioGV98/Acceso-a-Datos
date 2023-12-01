@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.Collection;
 import java.util.Scanner;
 
 public class _8_ {
@@ -24,8 +25,12 @@ public class _8_ {
                 System.out.println("Escribeme el codigo de la sede");
                 int codSede = Integer.parseInt(sc.nextLine());
                 Sede sede = s.get(Sede.class, codSede);
-                System.out.println(sede.toString());
                 t.commit();
+                Collection<Departamento> dep = sede.getDepartamentosByIdSede();
+                for (Departamento departamento : dep) {
+                    System.out.println(departamento.getNomDepto());
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace(System.err);
                 if (t != null) {
