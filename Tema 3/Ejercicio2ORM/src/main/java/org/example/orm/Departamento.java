@@ -11,6 +11,7 @@ public class Departamento {
     //private Integer idSede;
     private Sede sedeByIdSede;
     private Collection<Empleado> empleadosByIdDepto;
+    private Integer idSede;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -29,10 +30,6 @@ public class Departamento {
         return nomDepto;
     }
 
-    public void setNomDepto(String nomDepto) {
-        this.nomDepto = nomDepto;
-    }
-
     /*@Basic
     @Column(name = "id_sede", nullable = false)
     public Integer getIdSede() {
@@ -42,6 +39,10 @@ public class Departamento {
     /*public void setIdSede(Integer idSede) {
         this.idSede = idSede;
     }*/
+
+    public void setNomDepto(String nomDepto) {
+        this.nomDepto = nomDepto;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -90,5 +91,15 @@ public class Departamento {
                 "idDepto=" + idDepto +
                 ", nomDepto='" + nomDepto + '\'' +
                 '}';
+    }
+
+    @Basic
+    @Column(name = "id_sede", nullable = false)
+    public Integer getIdSede() {
+        return idSede;
+    }
+
+    public void setIdSede(Integer idSede) {
+        this.idSede = idSede;
     }
 }
