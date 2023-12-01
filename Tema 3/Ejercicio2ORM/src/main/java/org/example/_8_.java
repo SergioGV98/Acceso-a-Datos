@@ -25,9 +25,7 @@ public class _8_ {
                 int codSede = Integer.parseInt(sc.nextLine());
                 Sede sede = s.get(Sede.class, codSede);
                 System.out.println(sede.toString());
-                //Departamento departamento = s.get(Departamento.class, sede.getIdSede());
                 t.commit();
-                //System.out.println(departamento.toString());
             } catch (Exception ex) {
                 ex.printStackTrace(System.err);
                 if (t != null) {
