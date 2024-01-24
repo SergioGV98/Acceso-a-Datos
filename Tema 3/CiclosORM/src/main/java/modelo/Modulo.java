@@ -3,6 +3,7 @@ package modelo;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "modulo", schema = "ciclosorm")
@@ -17,7 +18,7 @@ public class Modulo {
     private String nombre;
 
     @ManyToMany(mappedBy = "modulo")
-    private Collection<Alumno> alumnos;
+    private Collection<Alumno> alumnos = new HashSet<Alumno>();
 
 
 

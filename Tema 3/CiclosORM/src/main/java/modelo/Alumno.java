@@ -26,9 +26,7 @@ public class Alumno {
     private Grupo grupo;
 
     @ManyToMany
-    @JoinTable(name = "matriculas", catalog = "ciclosorm",
-            joinColumns = {@JoinColumn(name = "id_alumno", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "id_modulo", referencedColumnName = "id")})
+    @JoinColumn(name = "id_modulo", nullable = false)
     private Collection<Modulo> modulos;
 
     public Alumno(String nombre) {
