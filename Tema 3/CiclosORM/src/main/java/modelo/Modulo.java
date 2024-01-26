@@ -18,8 +18,7 @@ public class Modulo {
     private String nombre;
 
     @ManyToMany(mappedBy = "modulo")
-    private Collection<Alumno> alumnos = new HashSet<Alumno>();
-
+    private Collection<Modulo> modulos = new HashSet<Modulo>();
 
 
 }

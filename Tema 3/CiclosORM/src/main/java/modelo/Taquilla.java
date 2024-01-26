@@ -14,4 +14,27 @@ public class Taquilla {
     @Column(name = "num", nullable = false, unique = true)
     private Long num;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getNum() {
+        return num;
+    }
+
+    public void setNum(Long num) {
+        this.num = num;
+    }
+
+    @Override
+    public String toString() {
+        return "Taquilla{" +
+                "id=" + id +
+                ", num=" + num +
+                '}';
+    }
 }
