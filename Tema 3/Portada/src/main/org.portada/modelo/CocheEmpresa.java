@@ -21,5 +21,54 @@ public class CocheEmpresa {
     @Column(name = "coche_empleado")
     private Empleado empleado;
 
-    
+    public CocheEmpresa() {
+    }
+
+    public CocheEmpresa(String matricula, LocalDate asignadoHasta, Empleado empleado) {
+        this.matricula = matricula;
+        this.asignadoHasta = asignadoHasta;
+        this.empleado = empleado;
+    }
+
+    public int getIdCocheEmpresa() {
+        return idCocheEmpresa;
+    }
+
+    public void setIdCocheEmpresa(int idCocheEmpresa) {
+        this.idCocheEmpresa = idCocheEmpresa;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public LocalDate getAsignadoHasta() {
+        return asignadoHasta;
+    }
+
+    public void setAsignadoHasta(LocalDate asignadoHasta) {
+        this.asignadoHasta = asignadoHasta;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    @Override
+    public String toString() {
+        return "CocheEmpresa{" +
+                "idCocheEmpresa=" + idCocheEmpresa +
+                ", matricula='" + matricula + '\'' +
+                ", asignadoHasta=" + asignadoHasta +
+                ", empleado=" + empleado +
+                '}';
+    }
 }
