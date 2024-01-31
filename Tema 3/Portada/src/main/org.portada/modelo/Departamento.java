@@ -14,8 +14,8 @@ public class Departamento {
     @Basic
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany
-    @Column(name = "sede")
+    @ManyToOne
+    @JoinColumn(name = "id_sede", nullable = false)
     private Sede sede;
     @ManyToMany
     @JoinColumn(name = "idProyecto", nullable = false)
@@ -24,11 +24,12 @@ public class Departamento {
     @JoinColumn(name = "id_empleado", nullable = false)
     private Collection<Empleado> empleados;
 
-    public Departamento() {
-    }
-
-    public Departamento(String nombre) {
+    public Departamento(int idDeparamento, String nombre, Sede sede, Collection<Proyecto> proyectos, Collection<Empleado> empleados) {
+        this.idDeparamento = idDeparamento;
         this.nombre = nombre;
+        this.sede = sede;
+        this.proyectos = proyectos;
+        this.empleados = empleados;
     }
 
     public int getIdDeparamento() {

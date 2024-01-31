@@ -18,7 +18,7 @@ public class CocheEmpresa {
     @Column(name = "asignacion")
     private LocalDate asignadoHasta;
     @OneToOne
-    @Column(name = "coche_empleado")
+    @PrimaryKeyJoinColumn(name = "coche_empleado")
     private Empleado empleado;
 
     public CocheEmpresa() {
