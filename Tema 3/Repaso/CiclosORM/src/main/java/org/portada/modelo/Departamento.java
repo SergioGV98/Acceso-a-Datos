@@ -18,19 +18,15 @@ public class Departamento {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "id_sede", nullable = false)
-    private Sede sede;
-
-    @OneToMany(mappedBy = "departamento")
+    @OneToMany()
+    @JoinColumn(name = "departamento_id")
     private Collection<Empleado> empleado = new HashSet<Empleado>();
 
     public Departamento() {
     }
 
-    public Departamento(String nombre, Sede sede) {
+    public Departamento(String nombre) {
         this.nombre = nombre;
-        this.sede = sede;
     }
 
     public Long getId() {
@@ -49,14 +45,6 @@ public class Departamento {
         this.nombre = nombre;
     }
 
-    public Sede getSede() {
-        return sede;
-    }
-
-    public void setSede(Sede sede) {
-        this.sede = sede;
-    }
-
     public Collection<Empleado> getEmpleado() {
         return empleado;
     }
@@ -65,17 +53,18 @@ public class Departamento {
         this.empleado = empleado;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Departamento that = (Departamento) o;
-        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(sede, that.sede) && Objects.equals(empleado, that.empleado);
+        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(empleado, that.empleado);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, sede, empleado);
+        return Objects.hash(id, nombre, empleado);
     }
 
     @Override
@@ -83,7 +72,6 @@ public class Departamento {
         return "Departamento{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", sede=" + sede +
                 ", empleado=" + empleado +
                 '}';
     }

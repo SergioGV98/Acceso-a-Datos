@@ -19,17 +19,12 @@ public class Empleado {
     @Column(name = "numEmp", nullable = false, unique = true)
     private int numEmp;
 
-    @ManyToOne
-    @JoinColumn(name = "id_departamento", nullable = false)
-    private Departamento departamento;
-
     public Empleado() {
     }
 
-    public Empleado(String nombre, int numEmp, Departamento departamento) {
+    public Empleado(String nombre, int numEmp) {
         this.nombre = nombre;
         this.numEmp = numEmp;
-        this.departamento = departamento;
     }
 
     public Long getId() {
@@ -56,25 +51,18 @@ public class Empleado {
         this.numEmp = numEmp;
     }
 
-    public Departamento getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
-    }
-
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Empleado empleado = (Empleado) o;
-        return numEmp == empleado.numEmp && Objects.equals(id, empleado.id) && Objects.equals(nombre, empleado.nombre) && Objects.equals(departamento, empleado.departamento);
+        return numEmp == empleado.numEmp && Objects.equals(id, empleado.id) && Objects.equals(nombre, empleado.nombre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, numEmp, departamento);
+        return Objects.hash(id, nombre, numEmp);
     }
 
     @Override
@@ -83,7 +71,6 @@ public class Empleado {
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", numEmp=" + numEmp +
-                ", departamento=" + departamento +
                 '}';
     }
 }

@@ -19,7 +19,8 @@ public class Sede {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany(mappedBy = "sede")
+    @OneToMany
+    @JoinColumn(name = "sede_id")
     private Collection<Departamento> departamentos = new HashSet<Departamento>();
 
     public Sede() {

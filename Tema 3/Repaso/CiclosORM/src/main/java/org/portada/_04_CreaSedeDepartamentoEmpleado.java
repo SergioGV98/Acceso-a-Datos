@@ -20,34 +20,25 @@ public class _04_CreaSedeDepartamentoEmpleado {
                 s.persist(s1);
 
                 // Departamento 1
-                Departamento d1 = new Departamento("Android studio", s1);
+                Departamento d1 = new Departamento("Android studio");
                 s.persist(d1);
 
-                // Empleado 1
-                Empleado e1 = new Empleado("Sergio", 1, d1);
-                s.persist(e1);
-
-
-                // Sede 2
-                Sede s2 = new Sede("Accenture");
-                s.persist(s2);
-
-                // Departamento 2
-                Departamento d2 = new Departamento("Flutter", s2);
+                Departamento d2 = new Departamento("Flutter");
                 s.persist(d2);
 
-                // Empleado 2
-                Empleado e2 = new Empleado("Carlos", 2, d2);
+                // Empleado 1
+                Empleado e1 = new Empleado("Sergio", 1);
+                s.persist(e1);
+                Empleado e2 = new Empleado("Carlos", 2);
                 s.persist(e2);
-
-                // Departamento 3
-                Departamento d3 = new Departamento("Unity", s2);
-                s.persist(d3);
-
-                // Empleado 3
-                Empleado e3 = new Empleado("Miguel", 3, d3);
-                s.persist(e3);
+                s1.getDepartamentos().add(d1);
+                d1.getEmpleado().add(e1);
+                s1.getDepartamentos().add(d2);
+                d1.getEmpleado().add(e2);
                 t.commit();
+
+                s.refresh(s1);
+                System.out.println(s1);
 
             } catch (Exception ex) {
                 ex.printStackTrace(System.err);
