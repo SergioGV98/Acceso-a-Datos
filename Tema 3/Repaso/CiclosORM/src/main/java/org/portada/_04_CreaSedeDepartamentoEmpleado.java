@@ -8,45 +8,82 @@ import org.portada.modelo.Departamento;
 import org.portada.modelo.Empleado;
 import org.portada.modelo.Sede;
 
+import java.util.List;
+
 public class _04_CreaSedeDepartamentoEmpleado {
     public static void main(String[] args) {
-        try (SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); Session s = sessionFactory.openSession()) {
-            Transaction t = null;
+        try (SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+            Transaction transaction = null;
             try {
-                t = s.beginTransaction();
+                transaction = session.beginTransaction();
 
-                // Sede 1
-                Sede s1 = new Sede("Bosonit");
-                s.persist(s1);
+                Sede sede1 = new Sede("Bosonit");
+                session.persist(sede1);
+                Sede sede2 = new Sede("NNT Data");
+                session.persist(sede2);
 
-                // Departamento 1
-                Departamento d1 = new Departamento("Android studio");
-                s.persist(d1);
+                Departamento departamento1_1 = new Departamento("Android");
+                departamento1_1.setSede(sede1);
+                session.persist(departamento1_1);
 
-                Departamento d2 = new Departamento("Flutter");
-                s.persist(d2);
+                Departamento departamento1_2 = new Departamento("Flutter");
+                departamento1_2.setSede(sede1);
+                session.persist(departamento1_2);
 
-                // Empleado 1
-                Empleado e1 = new Empleado("Sergio", 1);
-                s.persist(e1);
-                Empleado e2 = new Empleado("Carlos", 2);
-                s.persist(e2);
-                s1.getDepartamentos().add(d1);
-                d1.getEmpleado().add(e1);
-                s1.getDepartamentos().add(d2);
-                d1.getEmpleado().add(e2);
-                t.commit();
+                Departamento departamento2_1 = new Departamento("Java");
+                departamento2_1.setSede(sede2);
+                session.persist(departamento2_1);
 
-                s.refresh(s1);
-                System.out.println(s1);
+                Departamento departamento2_2 = new Departamento("Python");
+                departamento2_2.setSede(sede2);
+                session.persist(departamento2_2);
+
+                Empleado empleado1 = new Empleado("Sergio", 1);
+                empleado1.setDepartamento(departamento1_1);
+                session.persist(empleado1);
+
+                Empleado empleado2 = new Empleado("Carlos", 2);
+                empleado2.setDepartamento(departamento1_1);
+                session.persist(empleado2);
+
+                Empleado empleado3 = new Empleado("Ana", 3);
+                empleado3.setDepartamento(departamento2_1);
+                session.persist(empleado3);
+
+                transaction.commit();
+
+                displayEmployeeData(session);
+                displayDepartmentsForSedes(session);
 
             } catch (Exception ex) {
-                ex.printStackTrace(System.err);
-                if (t != null) {
-                    System.out.println("ERROR: ROLLBACK");
-                    t.rollback();
+                if (transaction != null) {
+                    transaction.rollback();
                 }
+                ex.printStackTrace();
             }
+        }
+    }
+
+    private static void displayDepartmentsForSedes(Session session) {
+        List<Sede> sedes = session.createQuery("FROM Sede", Sede.class).getResultList();
+        for (Sede sede : sedes) {
+            System.out.println("Sede: " + sede.getNombre());
+            System.out.println("Departamentos:");
+
+            for (Departamento departamento : sede.getDepartamentos()) {
+                System.out.println("  - " + departamento.getNombre());
+            }
+
+            System.out.println();
+        }
+    }
+
+    private static void displayEmployeeData(Session session) {
+        List<Empleado> empleados = session.createQuery("FROM Empleado", Empleado.class).getResultList();
+        System.out.println("Employee Data:");
+        for (Empleado empleado : empleados) {
+            System.out.println(empleado);
         }
     }
 }

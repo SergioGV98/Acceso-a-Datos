@@ -56,7 +56,8 @@ public class Sede {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Sede sede)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sede sede = (Sede) o;
         return Objects.equals(id, sede.id) && Objects.equals(nombre, sede.nombre) && Objects.equals(departamentos, sede.departamentos);
     }
 

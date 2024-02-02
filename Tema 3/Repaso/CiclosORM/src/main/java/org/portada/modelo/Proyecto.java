@@ -9,7 +9,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "proyecto", schema = "ciclosorm")
 public class Proyecto {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,11 +19,9 @@ public class Proyecto {
     private String nombre;
 
     @ManyToMany
-    @JoinTable(name = "proyecto_department", catalog = "ciclosorm",
-            joinColumns = {@JoinColumn(name = "id_proyecto", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "departamento_id", referencedColumnName = "id")})
-    private Collection<Empleado> empleados = new HashSet<Empleado>();
-
+    @JoinTable(name = "proyecto_departamento", schema = "ciclosorm", joinColumns = @JoinColumn(name = "id_departamento", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "id_proyecto", referencedColumnName = "id"))
+    private Collection<Departamento> departamento = new HashSet<Departamento>();
 
     public Proyecto() {
     }
@@ -49,24 +46,25 @@ public class Proyecto {
         this.nombre = nombre;
     }
 
-    public Collection<Empleado> getEmpleados() {
-        return empleados;
+    public Collection<Departamento> getDepartamento() {
+        return departamento;
     }
 
-    public void setEmpleados(Collection<Empleado> empleados) {
-        this.empleados = empleados;
+    public void setDepartamento(Collection<Departamento> departamento) {
+        this.departamento = departamento;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Proyecto proyecto)) return false;
-        return Objects.equals(id, proyecto.id) && Objects.equals(nombre, proyecto.nombre) && Objects.equals(empleados, proyecto.empleados);
+        if (o == null || getClass() != o.getClass()) return false;
+        Proyecto proyecto = (Proyecto) o;
+        return Objects.equals(id, proyecto.id) && Objects.equals(nombre, proyecto.nombre) && Objects.equals(departamento, proyecto.departamento);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, empleados);
+        return Objects.hash(id, nombre, departamento);
     }
 
     @Override

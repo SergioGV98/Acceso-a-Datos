@@ -2,12 +2,11 @@ package org.portada.modelo;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
 import java.util.Objects;
-
 @Entity
 @Table(name = "empleado", schema = "ciclosorm")
 public class Empleado {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -17,17 +16,16 @@ public class Empleado {
     @Column(name = "nombre")
     private String nombre;
     @Basic
-    @Column(name = "numEmp", nullable = false, unique = true)
+    @Column(name = "numEmp")
     private int numEmp;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "departamento_id")
+    @ManyToOne
+    @JoinColumn(name = "id_departamento", nullable = false)
     private Departamento departamento;
 
-    @ManyToMany(mappedBy = "empleados")
-    private Collection<Proyecto> proyectos;
-
-
+    @OneToOne
+    @JoinColumn(name = "datosProfesionales", nullable = false)
+    private DatosProfesionales datosProfesionales;
 
     public Empleado() {
     }
@@ -69,25 +67,25 @@ public class Empleado {
         this.departamento = departamento;
     }
 
-    public Collection<Proyecto> getProyectos() {
-        return proyectos;
+    public DatosProfesionales getDatosProfesionales() {
+        return datosProfesionales;
     }
 
-    public void setProyectos(Collection<Proyecto> proyectos) {
-        this.proyectos = proyectos;
+    public void setDatosProfesionales(DatosProfesionales datosProfesionales) {
+        this.datosProfesionales = datosProfesionales;
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
-        if (!(o instanceof Empleado empleado)) return false;
-        return numEmp == empleado.numEmp && Objects.equals(id, empleado.id) && Objects.equals(nombre, empleado.nombre) && Objects.equals(departamento, empleado.departamento) && Objects.equals(proyectos, empleado.proyectos);
+        if (o == null || getClass() != o.getClass()) return false;
+        Empleado empleado = (Empleado) o;
+        return numEmp == empleado.numEmp && Objects.equals(id, empleado.id) && Objects.equals(nombre, empleado.nombre) && Objects.equals(departamento, empleado.departamento) && Objects.equals(datosProfesionales, empleado.datosProfesionales);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, numEmp, departamento, proyectos);
+        return Objects.hash(id, nombre, numEmp, departamento, datosProfesionales);
     }
 
     @Override
@@ -97,6 +95,7 @@ public class Empleado {
                 ", nombre='" + nombre + '\'' +
                 ", numEmp=" + numEmp +
                 ", departamento=" + departamento +
+                ", datosProfesionales=" + datosProfesionales +
                 '}';
     }
 }

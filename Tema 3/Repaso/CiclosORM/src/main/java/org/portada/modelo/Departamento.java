@@ -9,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "departamento", schema = "ciclosorm")
 public class Departamento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -18,11 +19,12 @@ public class Departamento {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "id_sede", nullable = false)
     private Sede sede;
 
     @OneToMany(mappedBy = "departamento")
-    private Collection<Empleado> empleado = new HashSet<Empleado>();
+    private Collection<Empleado> empleados = new HashSet<Empleado>();
 
     public Departamento() {
     }
@@ -55,24 +57,25 @@ public class Departamento {
         this.sede = sede;
     }
 
-    public Collection<Empleado> getEmpleado() {
-        return empleado;
+    public Collection<Empleado> getEmpleados() {
+        return empleados;
     }
 
-    public void setEmpleado(Collection<Empleado> empleado) {
-        this.empleado = empleado;
+    public void setEmpleados(Collection<Empleado> empleados) {
+        this.empleados = empleados;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Departamento that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(sede, that.sede) && Objects.equals(empleado, that.empleado);
+        if (o == null || getClass() != o.getClass()) return false;
+        Departamento that = (Departamento) o;
+        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(sede, that.sede) && Objects.equals(empleados, that.empleados);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, sede, empleado);
+        return Objects.hash(id, nombre, sede, empleados);
     }
 
     @Override
