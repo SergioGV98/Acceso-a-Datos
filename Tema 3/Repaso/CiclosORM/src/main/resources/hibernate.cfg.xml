@@ -14,5 +14,6 @@
         <mapping class="org.portada.modelo.Sede"/>
         <mapping class="org.portada.modelo.Departamento"/>
         <mapping class="org.portada.modelo.Empleado"/>
+        <mapping class="org.portada.modelo.Proyecto"/>
     </session-factory>
 </hibernate-configuration>

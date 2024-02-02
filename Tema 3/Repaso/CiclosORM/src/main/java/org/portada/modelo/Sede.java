@@ -19,8 +19,7 @@ public class Sede {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany
-    @JoinColumn(name = "sede_id")
+    @OneToMany(mappedBy = "sede")
     private Collection<Departamento> departamentos = new HashSet<Departamento>();
 
     public Sede() {
@@ -57,8 +56,7 @@ public class Sede {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Sede sede = (Sede) o;
+        if (!(o instanceof Sede sede)) return false;
         return Objects.equals(id, sede.id) && Objects.equals(nombre, sede.nombre) && Objects.equals(departamentos, sede.departamentos);
     }
 
@@ -72,7 +70,6 @@ public class Sede {
         return "Sede{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", departamentos=" + departamentos +
                 '}';
     }
 }

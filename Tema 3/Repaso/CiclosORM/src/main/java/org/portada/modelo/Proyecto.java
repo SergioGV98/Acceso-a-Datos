@@ -7,8 +7,9 @@ import java.util.HashSet;
 import java.util.Objects;
 
 @Entity
-@Table(name = "departamento", schema = "ciclosorm")
-public class Departamento {
+@Table(name = "proyecto", schema = "ciclosorm")
+public class Proyecto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -18,16 +19,17 @@ public class Departamento {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne(optional = false)
-    private Sede sede;
+    @ManyToMany
+    @JoinTable(name = "proyecto_department", catalog = "ciclosorm",
+            joinColumns = {@JoinColumn(name = "id_proyecto", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "departamento_id", referencedColumnName = "id")})
+    private Collection<Empleado> empleados = new HashSet<Empleado>();
 
-    @OneToMany(mappedBy = "departamento")
-    private Collection<Empleado> empleado = new HashSet<Empleado>();
 
-    public Departamento() {
+    public Proyecto() {
     }
 
-    public Departamento(String nombre) {
+    public Proyecto(String nombre) {
         this.nombre = nombre;
     }
 
@@ -47,40 +49,31 @@ public class Departamento {
         this.nombre = nombre;
     }
 
-    public Sede getSede() {
-        return sede;
+    public Collection<Empleado> getEmpleados() {
+        return empleados;
     }
 
-    public void setSede(Sede sede) {
-        this.sede = sede;
-    }
-
-    public Collection<Empleado> getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Collection<Empleado> empleado) {
-        this.empleado = empleado;
+    public void setEmpleados(Collection<Empleado> empleados) {
+        this.empleados = empleados;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Departamento that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(sede, that.sede) && Objects.equals(empleado, that.empleado);
+        if (!(o instanceof Proyecto proyecto)) return false;
+        return Objects.equals(id, proyecto.id) && Objects.equals(nombre, proyecto.nombre) && Objects.equals(empleados, proyecto.empleados);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, sede, empleado);
+        return Objects.hash(id, nombre, empleados);
     }
 
     @Override
     public String toString() {
-        return "Departamento{" +
+        return "Proyecto{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", sede=" + sede +
                 '}';
     }
 }

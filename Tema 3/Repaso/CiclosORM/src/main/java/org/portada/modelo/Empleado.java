@@ -2,6 +2,7 @@ package org.portada.modelo;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +19,15 @@ public class Empleado {
     @Basic
     @Column(name = "numEmp", nullable = false, unique = true)
     private int numEmp;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "departamento_id")
+    private Departamento departamento;
+
+    @ManyToMany(mappedBy = "empleados")
+    private Collection<Proyecto> proyectos;
+
+
 
     public Empleado() {
     }
@@ -51,18 +61,33 @@ public class Empleado {
         this.numEmp = numEmp;
     }
 
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    public Collection<Proyecto> getProyectos() {
+        return proyectos;
+    }
+
+    public void setProyectos(Collection<Proyecto> proyectos) {
+        this.proyectos = proyectos;
+    }
+
     @Override
     public boolean equals(Object o) {
 
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Empleado empleado = (Empleado) o;
-        return numEmp == empleado.numEmp && Objects.equals(id, empleado.id) && Objects.equals(nombre, empleado.nombre);
+        if (!(o instanceof Empleado empleado)) return false;
+        return numEmp == empleado.numEmp && Objects.equals(id, empleado.id) && Objects.equals(nombre, empleado.nombre) && Objects.equals(departamento, empleado.departamento) && Objects.equals(proyectos, empleado.proyectos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, numEmp);
+        return Objects.hash(id, nombre, numEmp, departamento, proyectos);
     }
 
     @Override
@@ -71,6 +96,7 @@ public class Empleado {
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", numEmp=" + numEmp +
+                ", departamento=" + departamento +
                 '}';
     }
 }
