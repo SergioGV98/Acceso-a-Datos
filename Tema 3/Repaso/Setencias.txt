@@ -1,0 +1,44 @@
+// Selecciona todos los registros de la entidad "Entidad"
+SELECT entidad FROM Entidad entidad
+
+// Selecciona registros de la entidad "Entidad" donde el atributo sea igual a :valor
+SELECT entidad FROM Entidad entidad WHERE entidad.atributo = :valor
+
+// Actualiza el valor del atributo a :nuevoValor en la entidad "Entidad" donde se cumple la condición
+UPDATE Entidad SET atributo = :nuevoValor WHERE condicion
+
+// Elimina registros de la entidad "Entidad" donde se cumple la condición
+DELETE FROM Entidad WHERE condicion
+
+// Inserta un nuevo registro en la entidad "Entidad" con valores :valor1 y :valor2
+INSERT INTO Entidad (atributo1, atributo2) VALUES (:valor1, :valor2)
+
+// Realiza una consulta con un JOIN entre dos entidades: Entidad1 y Entidad2, con una condición en el atributo2
+SELECT entidad1 FROM Entidad1 entidad1 JOIN entidad1.entidad2 entidad2 WHERE entidad2.atributo = :valor
+
+// Selecciona todos los registros de la entidad "Entidad" y los ordena ascendentemente por el atributo
+SELECT entidad FROM Entidad entidad ORDER BY entidad.atributo ASC
+
+// Realiza una consulta con parámetros dinámicos utilizando una Query y estableciendo el valor para :valor
+String hql = "SELECT entidad FROM Entidad entidad WHERE entidad.atributo = :valor";
+Query query = session.createQuery(hql);
+query.setParameter("valor", valor);
+List<Entidad> resultados = query.list();
+
+// Cuenta la cantidad de registros en la entidad "Entidad" que cumplen con la condición
+SELECT COUNT(entidad) FROM Entidad entidad WHERE condicion
+
+// Suma los valores del atributo en la entidad "Entidad"
+SELECT SUM(entidad.atributo) FROM Entidad entidad
+
+// Resta los valores de atributo1 y atributo2 en la entidad "Entidad"
+SELECT (entidad.atributo1 - entidad.atributo2) FROM Entidad entidad
+
+// Multiplica los valores de atributo1 y atributo2 en la entidad "Entidad"
+SELECT (entidad.atributo1 * entidad.atributo2) FROM Entidad entidad
+
+// Divide los valores de atributo1 entre atributo2 en la entidad "Entidad"
+SELECT (entidad.atributo1 / entidad.atributo2) FROM Entidad entidad
+
+// Utiliza CASE WHEN para determinar si el atributo es positivo o negativo en la entidad "Entidad"
+SELECT CASE WHEN entidad.atributo > 0 THEN 'Positivo' ELSE 'Negativo' END FROM Entidad entidad
