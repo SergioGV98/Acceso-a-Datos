@@ -2,12 +2,10 @@ package org.portada.modelo;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 @Entity
-@Table(name = "grupo", schema = "instituto")
-public class Grupo {
+@Table(name = "presidente", schema = "paises_orm")
+public class Presidente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -17,13 +15,10 @@ public class Grupo {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "grupo")
-    private Collection<Alumno> alumnos = new HashSet<Alumno>();
-
-    public Grupo() {
+    public Presidente() {
     }
 
-    public Grupo(String nombre) {
+    public Presidente(String nombre) {
         this.nombre = nombre;
     }
 
@@ -43,17 +38,9 @@ public class Grupo {
         this.nombre = nombre;
     }
 
-    public Collection<Alumno> getAlumnos() {
-        return alumnos;
-    }
-
-    public void setAlumnos(Collection<Alumno> alumnos) {
-        this.alumnos = alumnos;
-    }
-
     @Override
     public String toString() {
-        return "Grupo{" +
+        return "Presidente{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 '}';

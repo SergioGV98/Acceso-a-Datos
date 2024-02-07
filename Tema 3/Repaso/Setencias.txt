@@ -42,3 +42,8 @@ SELECT (entidad.atributo1 / entidad.atributo2) FROM Entidad entidad
 
 // Utiliza CASE WHEN para determinar si el atributo es positivo o negativo en la entidad "Entidad"
 SELECT CASE WHEN entidad.atributo > 0 THEN 'Positivo' ELSE 'Negativo' END FROM Entidad entidad
+
+CREATE USER 'nombre_usuario'@'localhost' IDENTIFIED BY 'contraseña';
+GRANT ALL PRIVILEGES ON nombre_base_de_datos.* TO 'nombre_usuario'@'localhost';
+FLUSH PRIVILEGES;
+

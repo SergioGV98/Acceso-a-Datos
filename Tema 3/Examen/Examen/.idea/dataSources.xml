@@ -19,11 +19,18 @@ C:/Users/cbo/IdeaProjects/CiclosORM2/src/main/resources/hibernate.cfg.xml</remar
       <jdbc-url>jdbc:mysql://localhost:3306/empresa_proyectos?createDatabaseIfNotExist=true</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="instituto" uuid="6690ee59-d85b-42fb-8b3d-c8e67c11f5cc">
+    <data-source source="LOCAL" name="Paises" uuid="6690ee59-d85b-42fb-8b3d-c8e67c11f5cc">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/instituto</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/paises_orm</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="paises_orm@paises_orm" uuid="9f04410e-6e2d-48ce-95ca-cab26a3623a8">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://paises_orm:3306/paises_orm</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

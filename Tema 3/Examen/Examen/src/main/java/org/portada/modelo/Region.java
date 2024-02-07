@@ -3,21 +3,25 @@ package org.portada.modelo;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "modulo", schema = "instituto")
-public class Modulo {
+@Table(name = "region", schema = "paises_orm")
+public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Basic
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    public Modulo() {
+    @ManyToOne
+    @JoinColumn(name = "pais_id", nullable = false)
+    private Pais pais;
+
+    public Region() {
     }
 
-    public Modulo(String nombre) {
+    public Region(String nombre) {
         this.nombre = nombre;
     }
 
@@ -37,11 +41,20 @@ public class Modulo {
         this.nombre = nombre;
     }
 
+    public Pais getPais() {
+        return pais;
+    }
+
+    public void setPais(Pais pais) {
+        this.pais = pais;
+    }
+
     @Override
     public String toString() {
-        return "Modulo{" +
+        return "Region{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", pais=" + pais +
                 '}';
     }
 }

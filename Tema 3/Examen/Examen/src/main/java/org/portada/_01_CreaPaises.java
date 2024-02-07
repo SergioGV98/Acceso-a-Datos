@@ -3,21 +3,21 @@ package org.portada;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.portada.modelo.Alumno;
-
 import org.hibernate.cfg.Configuration;
-import org.portada.modelo.Grupo;
+import org.portada.modelo.Pais;
+import org.portada.modelo.Presidente;
 
 import java.time.LocalDate;
 
-public class _02_CreaAlumnosYGrupo {
+public class _01_CreaPaises {
     public static void main(String[] args) {
-        Alumno a1 = new Alumno("Sergio", LocalDate.of(1998, 7, 2));
-        Alumno a2 = new Alumno("Adrian", LocalDate.of(2001, 6, 2));
-        Alumno a3 = new Alumno("Carlos", LocalDate.of(2004, 1, 22));
+        Pais espana = new Pais("España");
+        Pais francia = new Pais("Francia");
+        Pais inglaterra = new Pais("Inglaterra");
 
-        Grupo g1 = new Grupo("DAM");
-        Grupo g2 = new Grupo("DAW");
+        Presidente sergio = new Presidente("Sergio");
+        Presidente miguel = new Presidente("Miguel");
+
 
         try (SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); Session s = sessionFactory.openSession()) {
 
@@ -25,18 +25,16 @@ public class _02_CreaAlumnosYGrupo {
             try {
                 t = s.beginTransaction();
 
-                s.persist(g1);
-                s.persist(g2);
+                s.persist(sergio);
+                s.persist(miguel);
 
-                a1.setGrupo(g1);
-                a2.setGrupo(g2);
-                a3.setGrupo(g1);
-                s.persist(a1);
-                s.persist(a2);
-                s.persist(a3);
+                espana.setPresidente(sergio);
+                s.persist(espana);
+                francia.setPresidente(miguel);
+                s.persist(francia);
+                s.persist(inglaterra);
 
                 t.commit();
-
             } catch (Exception ex) {
                 ex.printStackTrace();
                 if (t != null) {
